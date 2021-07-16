@@ -1,7 +1,0 @@
-obj\Release\net5.0\yandex\cloud\ydb\v1/StorageTypeService.cs \
-obj\Release\net5.0\yandex\cloud\ydb\v1/StorageTypeServiceGrpc.cs: Protos/google/api/http.proto\
- C:/Users/S.Artemov/.nuget/packages/grpc.tools/2.37.0/build/native/include/google/protobuf/descriptor.proto\
- Protos/google/api/annotations.proto\
- Protos/yandex/cloud/ydb/v1/storage_type.proto\
- Protos/yandex/cloud/validation.proto\
- Protos/yandex/cloud/ydb/v1/storage_type_service.proto
