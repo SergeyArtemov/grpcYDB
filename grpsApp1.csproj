@@ -1,0 +1,107 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
+  </PropertyGroup>
+
+ 
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.17.1" />
+    <PackageReference Include="Grpc" Version="2.38.0" />
+    <PackageReference Include="Grpc.Auth" Version="2.38.0" />
+    <PackageReference Include="Grpc.Core" Version="2.38.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.37.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.38.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="5.0.5" />
+    <PackageReference Include="Security.Cryptography" Version="1.7.2" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="Yandex.Cloud.SDK" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/database.proto" GrpcServices="Client" ProtoRoot="Protos; cloudapi/third_party/googleapis;cloudapi" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/database_service.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/backup_service.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/resource_preset.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/location.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/location_service.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/storage_type.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/storage_type_service.proto" GrpcServices="Client" ProtoRoot="Protos" />
+
+    <Protobuf Include="Protos/yandex/cloud/operation/operation.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/ydb/v1/backup.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/yandex/cloud/validation.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/google/type/timeofday.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/google/type/dayofweek.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/google/rpc/Status.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/google/api/annotations.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/google/api/http.proto" GrpcServices="Client" ProtoRoot="Protos" />
+
+    <Protobuf Include="Protos/Ydb/Operations/ydb_operation.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Operations/V1/ydb_operation_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Table/ydb_table.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/ClickhouseInternal/ydb_clickhouse_internal.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Cms/ydb_cms.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Cms/V1/ydb_cms_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Operations/ydb_operation.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/ydb_status_codes.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Issue/ydb_issue_message.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Scheme/ydb_scheme.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Scheme/V1/ydb_scheme_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    
+    
+    <Protobuf Include="Protos/Ydb/Coordination/ydb_coordination.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Discovery/ydb_discovery.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Discovery/V1/ydb_discovery_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/ydb_value.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    
+    
+    <Protobuf Include="Protos/Ydb/Experimental/ydb_experimental.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    
+    <Protobuf Include="Protos/Ydb/Export/ydb_export.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Export/V1/ydb_export_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Import/ydb_import.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Import/V1/ydb_import_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Monitoring/ydb_monitoring.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/PersQueue/ClusterDiscovery/ydb_persqueue_cluster_discovery.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/PersQueue/V1/ydb_persqueue_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/PersQueue/ErrorCode/persqueue_error_codes_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/RateLimiter/ydb_rate_limiter.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/RateLimiter/V1/ydb_rate_limiter_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Monitoring/ydb_monitoring.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Monitoring/V1/ydb_monitoring_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Scripting/ydb_scripting.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Scripting/V1/ydb_scripting_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    
+    <Protobuf Include="Protos/Ydb/Table/ydb_table.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/Table/V1/ydb_table_v1.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    
+    <Protobuf Include="Protos/Ydb/TableStats/ydb_query_stats.proto" GrpcServices="Client" ProtoRoot="Protos" />
+
+    <Protobuf Include="Protos/Ydb/YqlInternal/ydb_yql_internal.proto" GrpcServices="Client" ProtoRoot="Protos" />
+
+    <Protobuf Include="Protos/Ydb/validation.proto" GrpcServices="Client" ProtoRoot="Protos" />
+
+    <Protobuf Include="Protos/Ydb/validation.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/ydb_common.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/ydb_status_codes.proto" GrpcServices="Client" ProtoRoot="Protos" />
+    <Protobuf Include="Protos/Ydb/ydb_value.proto" GrpcServices="Client" ProtoRoot="Protos" />
+
+              
+    </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Protos\google\rpc\" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,363 @@
+﻿using Grpc.Net.Client;
+using System;
+using Grpc.Core;
+using Grpc.Auth;
+using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Text;
+using System.Net;
+using Yandex.Cloud.Credentials;
+using Yandex.Cloud;
+using Yandex.Cloud.Resourcemanager.V1;
+using Yandex.Cloud.Generated;
+using Yandex.Cloud.Endpoint;
+
+namespace grpsApp1
+{
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+
+            //var db = new Database();
+            //db.Endpoint = "ydb.serverless.yandexcloud.net:2135";
+            //db.FolderId = "/ru-central1/b1gkdp1j3vovv5gh0ajr/etn00ckc408gskmlgqqb";
+            //db.Id = "/ru-central1/b1gkdp1j3vovv5gh0ajr/etn00ckc408gskmlgqqb";
+
+
+
+
+            //----------------------------
+            //var cert = new X509Certificate2(args[0], args[1]);
+            //var handler = new HttpClientHandler();
+            //handler.ClientCertificates.Add(cert);
+            //var httpClient = new HttpClient(handler);
+            //var channel4 = GrpcChannel.ForAddress("https://localhost:5001/", new GrpcChannelOptions
+            //{
+            //    HttpClient = httpClient,
+            //    Credentials = cc3
+            //});
+            //--------------------------------
+
+            //Uri host = new Uri("ydb.serverless.yandexcloud.net:2135");
+            //int port = host.Port;
+            //(string publicKeyInPemFormat, string commonName) = await GetCertificateInformationFromServer(host);
+            //string target = $"{commonName}:{port}";
+
+            //--------------------------------
+
+            //РАБОТАЕТ!!!
+            Sdk _sdk = new Sdk(new OAuthCredentialsProvider("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA"));
+            var client1 = _sdk.Services.Resourcemanager.CloudService;
+            Console.WriteLine("ListOperations=" + client1.ToString());
+            //Console.WriteLine("ListOperations=" + client1.ListOperations().ToString);
+            var resp1 = client1.List(new ListCloudsRequest());
+            Console.WriteLine(resp1.Clouds.ToString());
+            //Assert.NotZero(resp.Clouds.Count);
+            //-------------------------------
+
+            //var nn = new Yandex.Cloud.Resourcemanager.V1.CloudService.CloudServiceClient();
+
+            // Попытаемся воспроизвести поведение SDK 
+            // Получаем объект Sdk
+            // РАБОТАЕТ!!!
+            Sdk _sdk10 = new Sdk(new OAuthCredentialsProvider("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA"));
+            // Получаем объект ChannelCredentials
+            var cc10 = _sdk10.GetCredentials();
+            // Получаем Channel
+            Channel channel10 = new Channel("resource-manager.api.cloud.yandex.net:443",/*ChannelCredentials.Insecure*/ cc10);
+            var client10 = new CloudService.CloudServiceClient(channel10);
+            var resp4 = client10.List(new ListCloudsRequest());
+            Console.WriteLine(resp4.ToString());
+            //-------------------------------------------------
+            // Попытаемся воспроизвести поведение SDK вторым спососбом
+            // Получаем объект Sdk
+
+            // Получаем объект ChannelCredentials
+            
+            ChannelCredentials channelCredentials11 = new SslCredentials();
+            var cc11 =
+            ChannelCredentials.Create(
+                channelCredentials11,
+                CallCredentials.FromInterceptor(async (context, metadata) =>
+                {
+                    metadata.Add(
+                        new Metadata.Entry(
+                            "authorization",
+                            $"Bearer {new OAuthCredentialsProvider("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA").GetToken()}"
+                        )
+                    );
+                })
+            );
+
+            Channel channel11 = new Channel("resource-manager.api.cloud.yandex.net:443", cc11);
+            var client11 = new CloudService.CloudServiceClient(channel11);
+            var resp11 = client11.List(new ListCloudsRequest());
+            Console.WriteLine("*****"+resp11.ToString());
+            
+            //-------------------------------------------------
+
+
+            // Теперь попробуем запрос к YDB
+            Sdk _sdk15 = new Sdk(new OAuthCredentialsProvider("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA"));
+            // Получаем объект ChannelCredentials
+            ChannelCredentials channelCredentials1 = new SslCredentials(File.ReadAllText("C:/Cert/CA.pem"));
+            var cc15 =
+            ChannelCredentials.Create(
+                channelCredentials1,
+                CallCredentials.FromInterceptor(async (context, metadata) =>
+                {
+                    metadata.Add(
+                        new Metadata.Entry(
+                            "authorization",
+                            $"Bearer {new OAuthCredentialsProvider("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA").GetToken()}"
+                        )
+                    );
+                })
+            );
+
+            Channel channel15 = new Channel("ydb.serverless.yandexcloud.net:2135", cc15);
+            var client15 = new grpsApp1.DatabaseService.DatabaseServiceClient(channel15);
+            var g = new GetDatabaseRequest();
+            g.DatabaseId = "/ru-central1/b1gkdp1j3vovv5gh0ajr/etn00ckc408gskmlgqqb";
+            var resp15 = client15.Get(g);
+            Console.WriteLine(resp15.ToString());
+
+
+            //var cc15 = _sdk15.GetCredentials();
+            //var cc15 = ChannelCredentials.Create(//new SslCredentials(), cc15_);
+            //Channel channel15 = new Channel("ydb.serverless.yandexcloud.net:2135", cc15);
+
+            //var client15 = new DatabaseService.DatabaseServiceClient(channel15);
+            //ListDatabasesRequest ldbs = new ListDatabasesRequest();
+            //ldbs.FolderId = "b1gtdtrvh7ardms3vmpl";
+            //ldbs.PageToken = "AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA";
+            //var client15 = new grpsApp1.DatabaseService.DatabaseServiceClient(channel15);
+            //var g = new GetDatabaseRequest();
+            //g.DatabaseId = "/ru-central1/b1gkdp1j3vovv5gh0ajr/etn00ckc408gskmlgqqb";
+            //var resp15 = client15.Get(g);
+            //Console.WriteLine(resp15.ToString());
+
+
+            /*
+            //-------------------------------
+            Sdk _sdk2 = new Sdk(new OAuthCredentialsProvider("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA"));
+            var cc3 = _sdk2.GetCredentials();
+            Console.WriteLine(cc3.GetType().ToString());
+            //Channel channel3 = new Channel(sdk.GetEndpointAddress(endpointOverride ?? endpoint), cc3);
+            //--------------------------------
+
+            //CallCredentials cc2 = GoogleGrpcCredentials.FromAccessToken("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA");
+            //Console.WriteLine(cc2.GetType().ToString());
+            //var cc3 = ChannelCredentials.Create(new SslCredentials(), cc2);
+
+
+            //Console.WriteLine(cc3.ToString());
+
+
+            //-------------------------------
+            Channel channel3 = new Channel("ydb.serverless.yandexcloud.net:2135", cc3);  //ydb.serverless.yandexcloud.net
+            Console.WriteLine(channel3.State.ToString());
+            */
+
+            //var client0 = new DatabaseService.
+
+            /* !!!!!
+            var client1 = new DatabaseService.DatabaseServiceClient(channel3);
+            Console.WriteLine("******"+client1.ToString());
+            ListDatabasesRequest ldbs = new ListDatabasesRequest();
+            ldbs.FolderId = "b1gtdtrvh7ardms3vmplaaaaa";
+            var resp = client1.List(ldbs);//, new CallOptions()); //!!!!!!!!!!
+            
+           
+            
+            var client2 = new CloudService.CloudServiceClient(channel3);
+            //var resp2 = client2.ListOperations(new ListCloudOperationsRequest(), new CallOptions());
+            //var resp2 = client2.List(new ListCloudsRequest());//new ListOperationRequest());//Operations(new ListCloudOperationsRequest(), new CallOptions());
+
+            var resp2 = _sdk.Services.Resourcemanager.CloudService.List(new ListCloudsRequest());
+            Console.WriteLine("IIIIII"+resp2.ToString());
+
+
+            Channel channel4 = new Channel("api.cloud.yandex.net:443", cc3);
+            var client4 = new CloudService.CloudServiceClient(channel4);
+            var resp4 = client4.List(new ListCloudsRequest());
+            Console.WriteLine(resp4.ToString());
+            */
+
+            /*
+
+                        CallCredentials cc2 = GoogleGrpcCredentials.FromAccessToken("AQAAAAAAnb4MAATuwVBy2WSTL0EPjlNvh1ZN5tA");
+
+                        ChannelCredentials cc3 = ChannelCredentials.Create(, cc2);
+
+                        Channel channel = new Channel("ydb.serverless.yandexcloud.net", 2135, cc3);
+                        var client1 = new DatabaseService.DatabaseServiceClient(channel);
+
+                        ListDatabasesRequest ldbs = new ListDatabasesRequest();
+                        ldbs.FolderId = "b1gtdtrvh7ardms3vmpl";
+            */
+            //client1.List(ldbs,
+
+            //Console.WriteLine(resp.Databases[0].ToString());
+
+            //Console.WriteLine(cc2.ToString());//.ToString());
+            //Console.WriteLine(client1.ToString());
+            //Console.WriteLine(channel.State.ToString());
+            // ListDatabasesRequest ldbs = new ListDatabasesRequest();
+            //ldbs.FolderId = "b1gtdtrvh7ardms3vmpl";
+            //ListDatabasesResponse resp;
+            //Grpc.Core.CallOptions opts = new Grpc.Core.CallOptions();
+            //Grpc.Core.ChannelBase chalbase1 = new Grpc.Core.ChannelBase()
+            //DatabaseService.DatabaseServiceClient dsc = new DatabaseService.DatabaseServiceClient()
+
+            /*
+            DatabaseService.DatabaseServiceClient client1 = new DatabaseService.DatabaseServiceClient();
+
+            ListDatabasesRequest ldbs = new ListDatabasesRequest();
+            ldbs.FolderId = "b1gtdtrvh7ardms3vmpl";
+            CallOptions opts = new Grpc.Core.CallOptions();
+
+            ListDatabasesResponse resp = client1.List(ldbs,opts);
+            */
+
+
+            // List(ldbs,opts);
+
+            //ldbs.
+
+            //.folderId_ = "";
+
+            //          folderId_ = other.folderId_;
+            //pageSize_ = other.pageSize_;
+            //pageToken_ = other.pageToken_;
+
+            //var c = db.DocumentApiEndpoint.//CalculateSize();
+
+            Console.WriteLine("РПРОАПАР!!");
+        }
+
+
+        // https://github.com/yandex-cloud/dotnet-sdk/blob/master/Yandex.Cloud.SDK/YandexCloud.cs
+        public class Sdk222
+        {
+            public Sdk222(ICredentialsProvider credentialsProvider)
+            {
+                _credentialsProvider = credentialsProvider;
+                //Services = new Services(this);
+            }
+
+            public Sdk222() : this(new MetadataCredentialsProvider())
+            {
+            }
+
+            public readonly Services Services;
+
+            /////////
+
+            private ApiEndpointService.ApiEndpointServiceClient EndpointService()
+            {
+                var channel = new Channel("api.cloud.yandex.net:443", _channelCredentials);
+                return new ApiEndpointService.ApiEndpointServiceClient(channel);
+            }
+
+            private readonly ChannelCredentials _channelCredentials = new SslCredentials();
+            private readonly ICredentialsProvider _credentialsProvider;
+
+            public ChannelCredentials GetCredentials()
+            {
+                return ChannelCredentials.Create(
+                    _channelCredentials,
+                    CallCredentials.FromInterceptor(async (context, metadata) =>
+                    {
+                        metadata.Add(
+                            new Metadata.Entry(
+                                "authorization",
+                                $"Bearer {_credentialsProvider.GetToken()}"
+                            )
+                        );
+                    })
+                );
+            }
+
+            public string GetEndpointAddress(string endpoint)
+            {
+                var req = new GetApiEndpointRequest { ApiEndpointId = endpoint };
+                return EndpointService().Get(req).Address;
+            }
+
+            private Channel CreateChannelForEndpoint(string endpoint)
+            {
+                return new Channel(GetEndpointAddress(endpoint), GetCredentials());
+            }
+        }
+
+        //------------------------------------------------------
+
+        private static async Task<(string PublicKeyInPemFormat, string CommonName)> GetCertificateInformationFromServer(Uri host)
+        {
+            Regex commonNameRegex = new Regex("CN=([\\w\\-.]*),?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            StringBuilder builder = new StringBuilder();
+            const string newline = "\n";
+
+            X509Certificate certFromServer;
+
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage _ = await client.GetAsync(host))
+                {
+                    //get the certificate from the server, so we don't need to store the pem.
+                    certFromServer = ServicePointManager.FindServicePoint(host).Certificate;
+                    if (certFromServer == null)
+                        throw new InvalidOperationException($"Could not get certificate from server ({host}).");
+                }
+            }
+
+            Match match = commonNameRegex.Match(certFromServer.Subject);
+            if (!match.Success)
+                throw new InvalidOperationException($"Could not extract CN (Common Name) from server certificate ({certFromServer.Subject}).");
+
+            string commonName = match.Groups[1].Captures[0].Value;
+
+            X509Certificate2 certificate = new X509Certificate2(certFromServer);
+            string pem = ExportToPem(certificate);
+
+            builder.AppendLine(
+                "# Issuer: " + certificate.Issuer + newline +
+                "# Subject: " + certificate.Subject + newline +
+                "# Label: " + certificate.FriendlyName + newline +
+                "# Serial: " + certificate.SerialNumber + newline +
+                "# SHA1 Fingerprint: " + certificate.GetCertHashString() + newline +
+                pem + newline);
+
+            return (builder.ToString(), commonName);
+        }
+
+        /// <summary>
+        /// Export a certificate to a PEM format string
+        /// </summary>
+        /// <param name="cert">The certificate to export</param>
+        /// <returns>A PEM encoded string</returns>
+        private static string ExportToPem(X509Certificate cert)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine("-----BEGIN CERTIFICATE-----");
+
+            builder.AppendLine(Convert.ToBase64String(cert.Export(X509ContentType.Cert), Base64FormattingOptions.InsertLineBreaks));
+            builder.AppendLine("-----END CERTIFICATE-----");
+
+            return builder.ToString();
+        }
+
+    }
+}
