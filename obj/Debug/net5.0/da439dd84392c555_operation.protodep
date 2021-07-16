@@ -1,4 +1,0 @@
-obj\Debug\net5.0\yandex\cloud\operation/Operation.cs: C:/Users/S.Artemov/.nuget/packages/grpc.tools/2.38.0/build/native/include/google/protobuf/any.proto\
- Protos/google/rpc/status.proto\
- C:/Users/S.Artemov/.nuget/packages/grpc.tools/2.38.0/build/native/include/google/protobuf/timestamp.proto\
- Protos/yandex/cloud/operation/operation.proto
