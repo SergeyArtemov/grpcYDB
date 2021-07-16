@@ -1,0 +1,2 @@
+obj\Release\net5.0\google\rpc/Status.cs: C:/Users/S.Artemov/.nuget/packages/grpc.tools/2.37.0/build/native/include/google/protobuf/any.proto\
+ Protos/google/rpc/Status.proto
